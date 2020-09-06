@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweeter - Home</title>
+    <link rel="stylesheet" href="{% static 'tweeter/css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <div class="wrapper">
+            <img src="{% static 'tweeter/images/logo.png' %}">
+            <span>Tweeter</span>
+            <form>
+                <input name="email" type="text" placeholder="Email Address">
+                <input name="password" type="password" placeholder="Password">
+            </form>
+        </div>
+    </header>
+    <div id="content">
+        <div class="wrapper">
+            <img src="{% static 'tweeter/images/frog.jpg' %}">
+            <div class="panel right">
+                <h1>New to Tweeter?</h1>
+                <p>
+                <form>
+                    <input name="email" type="text" placeholder="Email Address">
+                    <input name="password" type="text" placeholder="Password">
+                    <input name="password2" type="password" placeholder="Confirm password">
+                    <input type="submit" value="Create Account">
+                </form>
+                </p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="wrapper">
+            Tweeter - A Twitter Clone Tutorial<img src="{% static 'tweeter/images/logo-nettuts.png' %}">
+        </div>
+    </footer>
+    <script>
+        const tweets = document.getElementById('tweets');
+        const xhr = new XMLHttpRequest();
+        const method = 'GET';
+        const response = 'json';
+        const url = '/tweets'
+
+        xhr.responseType = response;
+        xhr.open(method, url);
+        xhr.onload = () => {
+            let responseFromView = xhr.response
+            let items = responseFromView.response; //the last response is coming from the data
+            items.map((item) => {
+                tweets.innerHTML += '<article id="tweet-' + item.id + '"><p class="body">' +
+                    item.content + '</p></article>'
+            })
+        }
+        xhr.send()
+    </script>
+</body>
+
+</html>
