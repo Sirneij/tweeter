@@ -1,0 +1,40 @@
+{% load static %}
+<div class="follow dark-mode-1">
+  <h3 class="follow-heading light-text border">Who to follow</h3>
+  <div class="follow-user border">
+    <div class="follow-user-img">
+      <img src="{% static 'tweeter/images/user3.jpg' %}" />
+    </div>
+    <div class="follow-user-info light-text">
+      <h4>Ann Smith</h4>
+      <p>@annsmith</p>
+    </div>
+    <button type="button" class="follow-btn dark-mode-2">Follow</button>
+  </div>
+  <div class="follow-user border">
+    <div class="follow-user-img">
+      <img src="{% static 'tweeter/images/user4.jpg' %}" />
+    </div>
+    <div class="follow-user-info light-text">
+      <h4>Nick Doe</h4>
+      <p>@nickdoe</p>
+    </div>
+    <button type="button" class="follow-btn dark-mode-2">Follow</button>
+  </div>
+  <div class="follow-user border">
+    <div class="follow-user-img">
+      <img src="{% static 'tweeter/images/user5.jpg' %}" />
+    </div>
+    <div class="follow-user-info light-text">
+      <h4>James Black</h4>
+      <p>@jamesblack</p>
+    </div>
+    <button type="button" class="follow-btn dark-mode-2">Follow</button>
+  </div>
+  <div class="follow-link">
+    <a href="#">Show more</a>
+  </div>
+  <!-- footer -->
+  {% include 'includes/_footer.html' %}
+  <!-- end of footer -->
+</div>

@@ -1,0 +1,94 @@
+{% extends '_base.html' %}
+<!-- title tag -->
+{% block title %} - Profile {% endblock title %}
+<!-- end of title -->
+{% load static %}
+<!-- feeds content -->
+{% block content %}
+<div class="feeds-content dark-mode-2">
+  <div class="feeds-header dark-mode-1 profile-bg">
+    <div class="header-top border">
+      <h4 class="light-text">Jane Smith</h4>
+      <button type="button" class="follow-btn dark-mode-2">Follow</button>
+    </div>
+  </div>
+  <div class="posts dark-mode-1">
+    <div class="post border">
+      <div class="user-avatar profile">
+        <img src="{% static 'tweeter/images/user2.jpg' %}" />
+      </div>
+      <div class="post-content">
+        <div class="post-user-info light-text">
+          <h4>Jane Smith</h4>
+          <p>@janesmith</p>
+          <div class="action">
+            <i class="action-item fas fa-ellipsis-h detail-icon"></i>
+            <i class="action-item fas fa-edit detail-icon"></i>
+          </div>
+        </div>
+        <p class="post-text light-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates
+          et voluptatibus vel tenetur quos, id omnis sed error fuga
+          necessitatibus.
+        </p>
+        <div class="detail">
+          <div class="detail-item">
+            <i class="fas fa-location-arrow detail-icon"></i>
+            <p class="detail-text">Akure, Ondo State</p>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-male detail-icon"></i>
+            <p class="detail-text">Akure, Ondo State</p>
+          </div>
+          <div class="detail-item">
+            <i class="far fa-calendar detail-icon"></i>
+            <p class="detail-text">Akure, Ondo State</p>
+          </div>
+        </div>
+        <div class="following light-text">
+          <p class="following-paragraph"><span>711</span> Following</p>
+          <p class="following-paragraph"><span>7.5K</span> Followers</p>
+        </div>
+      </div>
+    </div>
+    <div class="post border">
+      <div class="user-avatar">
+        <img src="{% static 'tweeter/images/user2.jpg' %}" />
+      </div>
+      <div class="post-content">
+        <div class="post-user-info light-text">
+          <h4>Helen Brown</h4>
+          <i class="fas fa-check-circle"></i>
+          <span>@helenbrown 15m</span>
+        </div>
+        <p class="post-text light-text">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates
+          et voluptatibus vel tenetur quos, id omnis sed error fuga
+          necessitatibus.
+        </p>
+        <div class="post-img">
+          <img src="{% static 'tweeter/images/post-img-1.jpg' %}" />
+        </div>
+        <div class="post-icons">
+          <i class="far fa-comment"></i>
+          <i class="fas fa-retweet"></i>
+          <i class="far fa-heart"></i>
+          <i class="fas fa-share-alt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- follow side bar -->
+  {% include 'includes/_followsidebar.html' %}
+  <!-- end of follow side bar -->
+</div>
+<!-- end of feeds content -->
+
+<!-- post modal -->
+{% include 'includes/_modal.html' %}
+<!-- end of post modal -->
+
+<!-- sidebar -->
+{% include 'includes/_sidebar.html' %}
+<!-- end of sidebar -->
+{% endblock content %}

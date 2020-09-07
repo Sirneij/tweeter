@@ -1,10 +1,26 @@
 {% load static %}
-<header>
-    <div class="wrapper">
-        <img src="{% static 'tweeter/images/logo.png' %}">
-        <span>Twitter Clone</span>
-        <form>
-            <input type="submit" id="btnLogOut" value="Log Out">
-        </form>
+<!-- feeds nav -->
+<nav class="feeds-nav dark-mode-1">
+  <div class="icons">
+    <a href="#" class="active"><i class="fas fa-home"></i></a>
+    <a href="#"><i class="fas fa-hashtag"></i></a>
+    <a href="#"><i class="far fa-bell"></i></a>
+    <a href="#"><i class="far fa-envelope"></i></a>
+  </div>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input
+      type="text"
+      placeholder="Search Twirrer"
+      class="search-bar-input dark-mode-2 light-text border"
+    />
+  </div>
+  <div class="user">
+    <div class="user-img-wrapper">
+      <img src="{% static 'tweeter/images/user1.jpg' %}" />
     </div>
-</header>
+    <a href="#" class="user-link light-text">Jane Smith</a>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</nav>
+<!-- end of feeds nav -->

@@ -1,0 +1,39 @@
+{% load static %}
+<!-- post modal -->
+<button type="button" class="post-btn">
+  +<i class="fas fa-feather-alt"></i>
+</button>
+
+<div class="modal-wrapper">
+  <div class="modal dark-mode-1">
+    <div class="modal-header border">
+      <i class="fas fa-times"></i>
+      <button type="button">Post</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-img">
+        <img src="{% static 'tweeter/images/user1.jpg' %}" />
+      </div>
+      <input
+        id="posttweet"
+        type="text"
+        placeholder="What's happening?"
+        class="modal-input dark-mode-2 light-text border"
+      />
+      <i class="far fa-smile"
+        ><span class="posttweetcount"
+          ><span id="totalchars">0</span>/250</span
+        ></i
+      >
+    </div>
+    <div class="modal-footer">
+      <div class="modal-icons">
+        <i class="far fa-image"></i>
+        <i class="fas fa-camera"></i>
+        <i class="far fa-chart-bar"></i>
+        <span>+</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of post modal -->

@@ -11,7 +11,7 @@ from .forms import TweetForm
 
 def home_view(request):
     context = {}
-    return render(request, 'pages/home.html', context)
+    return render(request, 'pages/feeds.html', context)
 
 
 def tweet_list(request):

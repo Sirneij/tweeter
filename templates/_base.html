@@ -1,30 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
+  {% load static %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tweeter
-        {% block title %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tweeter {% block title %} {% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'tweeter/css/all.css' %}" />
+    <link rel="stylesheet" href="{% static 'tweeter/css/main.css' %}" />
+  </head>
 
-        {% endblock title %}
-    </title>
-    <link rel="stylesheet" href="{% static 'tweeter/css/style.css' %}">
-</head>
-
-<body>
-    {% include 'includes/_nav.html' %}
-    <div id="content">
-        <div class="wrapper">
-
-            {% block content %}
-
-            {% endblock content %}
-
-        </div>
-    </div>
-    {% include 'includes/_footer.html' %}
-</body>
-
+  <body>
+    <section class="feeds-page">
+      {% include 'includes/_nav.html' %} {%block content%} {%endblock content%}
+    </section>
+    <script src="{% static 'tweeter/js/newsfeed.js' %}"></script>
+  </body>
 </html>
