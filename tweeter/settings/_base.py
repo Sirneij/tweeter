@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # Third party apps
+    'rest_framework',
     # local apps
     'tweets.apps.TweetsConfig',
 ]
@@ -135,3 +136,9 @@ STATICFILES_FINDERS = [
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / 'media/'
+
+AUTH_USER_MODEL = 'tweets.CustomUser'
+
+LOGIN_URL = '/login'
+
+MAX_TWEET_LENGTH = 250

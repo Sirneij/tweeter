@@ -232,7 +232,7 @@
         xhr.open(method, url);
         xhr.onload = () => {
           let responseFromView = xhr.response;
-          let items = responseFromView.response; //the last response is coming from the data
+          let items = responseFromView; //the last response is coming from the data
           let finalTweetStr = "";
 
           for (let i = 0; i < items.length; i++) {
