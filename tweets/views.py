@@ -6,13 +6,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.utils.http import is_safe_url
 from django.contrib.auth.decorators import login_required
+
+# DRF modules
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 # Django apps
 # Current-app modules
 from .models import Tweet
 from .forms import TweetForm
-from .serializers import TweetSerializer
+from .serializers import TweetSerializer, TweetActionSerializer
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -23,6 +26,7 @@ def home_view(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_tweet(request):
     serializer = TweetSerializer(data=request.POST or None)
     if serializer.is_valid(raise_exception=True):
@@ -32,17 +36,48 @@ def create_tweet(request):
 
 
 @api_view(['GET'])
-def feeds(request):
+def tweets(request):
     tweets = Tweet.objects.all()
     serializer = TweetSerializer(tweets, many=True)
     return Response(serializer.data, status=201)
 
 
 @api_view(['GET'])
-def feed(request, tweet_id):
+def tweet(request, tweet_id):
     tweet = get_object_or_404(Tweet, pk=tweet_id)
     serializer = TweetSerializer(tweet)
     return Response(serializer.data, status=201)
+
+
+@api_view(['DELETE', 'POST'])
+@permission_classes([IsAuthenticated])
+def delete_tweet(request, tweet_id):
+    tweet = get_object_or_404(Tweet, pk=tweet_id, user=request.user)
+    tweet.delete()
+    return Response({'message': 'Tweet deleted successfully...'}, status=201)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tweet_action(request):
+    '''
+    View for Liking, unliking and retweeting
+    '''
+    serializer = TweetActionSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        tweet_id = data.get("id")
+        tweet_action = data.get("action")
+        tweet = get_object_or_404(Tweet, pk=tweet_id)
+        if tweet_action == "like":
+            tweet.likes.add(request.user)
+            serializer = TweetSerializer(tweet)
+            return Response(serializer.data, status=201)
+        elif tweet_action == "unlike":
+            tweet.likes.remove(request.user)
+        elif tweet_action == "retweet":
+            pass
+    return Response({}, status=201)
 
 # @login_required
 

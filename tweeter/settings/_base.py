@@ -142,3 +142,4 @@ AUTH_USER_MODEL = 'tweets.CustomUser'
 LOGIN_URL = '/login'
 
 MAX_TWEET_LENGTH = 250
+TWEET_VALID_OPTIONS = ["like", "unlike", "retweet"]

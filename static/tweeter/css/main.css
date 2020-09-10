@@ -666,6 +666,12 @@ body {
   font-size: 1.8rem;
   color: #868383;
   margin-right: 6rem;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.post-icons i:hover {
+  color: #1aa1f5;
 }
 
 .follow {

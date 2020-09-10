@@ -58,11 +58,12 @@ class CustomUser(AbstractUser):
 class Tweet(models.Model):
     """Model definition for Tweet."""
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(
+        CustomUser, blank=True, related_name='tweet_user', through='TweetLike')
     content = models.TextField()
     image = models.FileField(
         upload_to='images/', max_length=100, null=True, blank=True)
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         """Meta definition for Tweet."""
@@ -80,3 +81,21 @@ class Tweet(models.Model):
             "content": self.content
         }
         return data
+
+
+class TweetLike(models.Model):
+    """Model definition for TweetLike."""
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta definition for TweetLike."""
+
+        verbose_name = 'TweetLike'
+        verbose_name_plural = 'TweetLikes'
+
+    def __str__(self):
+        """Unicode representation of TweetLike."""
+        return self.tweet.content

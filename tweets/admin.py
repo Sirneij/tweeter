@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import Tweet, CustomUser
+from .models import Tweet, CustomUser, TweetLike
 
 
 @admin.register(CustomUser)
@@ -73,7 +73,18 @@ class CustomUserAdmin(UserAdmin):
         return form
 
 
+class TweetLikeInline(admin.TabularInline):
+    '''Tabular Inline View for TweetLike'''
+
+    model = TweetLike
+    min_num = 3
+    max_num = 20
+    extra = 1
+    # raw_id_fields = (,)
+
+
 @admin.register(Tweet)
 class TweetAdmin(admin.ModelAdmin):
+    inlines = [TweetLikeInline]
     list_display = ('content', 'user')
     search_fields = ('user__first_name', 'user__last_name', 'content',)
