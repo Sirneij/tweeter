@@ -60,9 +60,10 @@ class Tweet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     likes = models.ManyToManyField(
         CustomUser, blank=True, related_name='tweet_user', through='TweetLike')
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
     image = models.FileField(
         upload_to='images/', max_length=100, null=True, blank=True)
+    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -74,6 +75,10 @@ class Tweet(models.Model):
     def __str__(self):
         """Unicode representation of Tweet."""
         return f'{self.content}'
+
+    @property
+    def is_retweeted(self):
+        return self.parent != None
 
     def serialize(self):
         data = {

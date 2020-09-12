@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from tweets.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include('tweets.urls', namespace='tweets')),
+    path("", home_view, name="home"),
+    path("api/", include('tweets.urls', namespace='tweets')),
 ]
 
 if settings.DEBUG:

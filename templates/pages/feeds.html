@@ -6,19 +6,18 @@
 <!-- feeds content -->
 {% block content %}
 <div class="feeds-content dark-mode-2">
-  <div class="feeds-header dark-mode-1">
+  <form
+    action="{% url 'tweets:new_tweet' %}"
+    method="POST"
+    class="feeds-header dark-mode-1"
+    id="tweet-form"
+  >
+    {% csrf_token %}
     <div class="header-top border">
       <h4 class="light-text">Home</h4>
       <i class="far fa-star"></i>
     </div>
-    <form
-      action="{% url 'tweets:new_tweet' %}"
-      method="POST"
-      class="header-post dark-mode-1 border"
-      id="tweet-form"
-    >
-      {% csrf_token %}
-
+    <div class="header-post dark-mode-1 border">
       <div class="header-img-wrapper">
         <img src="{% static 'tweeter/images/user1.jpg' %}" />
       </div>
@@ -31,14 +30,16 @@
         name="content"
         required
       />
+    </div>
+    <div class="additionals">
       <i class="far fa-image"></i>
       <i class="fas fa-camera"></i>
-      <button type="submit" class="submit-btn" title="tweet">
-        <i class="fas fa-sign-in-alt"></i>
-      </button>
-    </form>
+      <i class="fas fa-chart-bar"></i>
+      <button type="submit" class="bubbly-button" title="tweet">Tweet</button>
+    </div>
+    <hr />
     <div class="d-none alert alert-danger" id="error"></div>
-  </div>
+  </form>
 
   <div class="posts dark-mode-1" id="tweets"></div>
 
@@ -55,5 +56,192 @@
 <!-- end of sidebar -->
 
 {% block scripts %}
-<script></script>
+<script>
+  function errorDisplay(msg, display) {
+    let errorContainer = document.getElementById("error");
+    if (display === true) {
+      errorContainer.setAttribute("class", "d-block alert alert-danger");
+      errorContainer.innerHTML = msg;
+    } else {
+      errorContainer.setAttribute("class", "d-none alert alert-danger");
+    }
+  }
+  let tweetsContainer = document.getElementById("tweets");
+  let tweetCreateForm = document.getElementById("tweet-form");
+  let tweetCreateFormModal = document.getElementById("tweet-form-modal");
+  tweetCreateForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const myForm = e.target;
+    const formData = new FormData(myForm);
+    const url = myForm.getAttribute("action");
+    const method = myForm.getAttribute("method");
+    const response = "json";
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = response;
+    xhr.open(method, url);
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.onload = () => {
+      if (xhr.status === 201) {
+        errorDisplay("", false);
+        const newTweetJson = xhr.response;
+        const tweetElement = formatTweetElement(newTweetJson);
+        const tempHTML = tweetsContainer.innerHTML;
+        tweetsContainer.innerHTML = tweetElement + tempHTML;
+
+        myForm.reset();
+        modal.style.display = "none";
+        modalWrapper.classList.remove("modal-wrapper-display");
+        if (modalInput.value !== "") {
+          modalInput.value = "";
+          changeOpacity(0.5);
+        }
+      } else if (xhr.status === 400) {
+        const errorJson = xhr.response;
+        const errorContent = errorJson.content;
+        let errorContentMessage;
+        if (errorContent) {
+          errorContentMessage = errorContent[0];
+          if (errorContentMessage) {
+            errorDisplay(errorContentMessage, true);
+          } else {
+            alert("An error has occured. Kindly try again...");
+          }
+        } else {
+          alert("An error has occured. Kindly try again...");
+        }
+      }
+    };
+    xhr.onerror = () => {
+      alert("Oopps! An error occurred. Please try again later...");
+    };
+    xhr.send(formData);
+  });
+
+  tweetCreateFormModal.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const myForm = e.target;
+    const formData = new FormData(myForm);
+    const url = myForm.getAttribute("action");
+    const method = myForm.getAttribute("method");
+    const response = "json";
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = response;
+    xhr.open(method, url);
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.onload = () => {
+      if (xhr.status === 201) {
+        errorDisplay("", false);
+        const newTweetJson = xhr.response;
+        const tweetElement = formatTweetElement(newTweetJson);
+        const tempHTML = tweetsContainer.innerHTML;
+        tweetsContainer.innerHTML = tweetElement + tempHTML;
+        myForm.reset();
+      } else if (xhr.status === 400) {
+        const errorJson = xhr.response;
+        const errorContent = errorJson.content;
+        let errorContentMessage;
+        if (errorContent) {
+          errorContentMessage = errorContent[0];
+          if (errorContentMessage) {
+            errorDisplay(errorContentMessage, true);
+          } else {
+            alert("An error has occured. Kindly try again...");
+          }
+        } else {
+          alert("An error has occured. Kindly try again...");
+        }
+      }
+    };
+    xhr.onerror = () => {
+      alert("Oopps! An error occurred. Please try again later...");
+    };
+    xhr.send(formData);
+  });
+
+  function handleDidAction(tweetID, currentCount, action) {
+    console.log(tweetID, currentCount);
+    const csrftoken = getCookie("csrftoken");
+    const url = "{% url 'tweets:tweet_action' %}";
+    const method = "POST";
+    const data = JSON.stringify({
+      id: tweetID,
+      action: action,
+    });
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    xhr.onload = () => {
+      console.log(xhr.status, xhr.response);
+      loadTweets(tweetsContainer);
+    };
+    xhr.send(data);
+  }
+
+  const likeButton = (tweet) => {
+    return (
+      '<i class="far fa-heart" onclick="handleDidAction(' +
+      tweet.id +
+      "," +
+      tweet.likes +
+      "," +
+      "'like'" +
+      ')">' +
+      tweet.likes +
+      "</i>"
+    );
+  };
+
+  const retweetButton = (tweet) => {
+    return (
+      '<i class="fas fa-retweet" onclick="handleDidAction(' +
+      tweet.id +
+      "," +
+      tweet.likes +
+      "," +
+      "'retweet'" +
+      ')"></i>'
+    );
+  };
+
+  function formatTweetElement(tweet) {
+    let formattedTweet =
+      '<div class="post border" id="tweet-' +
+      tweet.id +
+      '"><div class="user-avatar"><img src="{% static "tweeter/images/user2.jpg" %}" /></div><div class="post-content"><div class="post-user-info light-text"><h4>Helen Brown</h4><i class="fas fa-check-circle"></i><span>@helenbrown 15m</span></div><p id="post-text" class="post-text light-text">' +
+      tweet.content +
+      '</p><div class="post-img"><img src="{% static "tweeter/images/post-img-1.jpg" %}" /></div><div class="post-icons"><i class="far fa-comment"></i>' +
+      retweetButton(tweet) +
+      likeButton(tweet) +
+      '<i class="fas fa-share-alt"></i></div></div></div>';
+    return formattedTweet;
+  }
+  const loadTweets = function (tweetElement) {
+    const xhr = new XMLHttpRequest();
+    const method = "GET";
+    const response = "json";
+    const url = "{% url 'tweets:tweets' %}";
+
+    xhr.responseType = response;
+    xhr.open(method, url);
+    xhr.onload = () => {
+      let responseFromView = xhr.response;
+      let items = responseFromView; //the last response is coming from the data
+      let finalTweetStr = "";
+
+      for (let i = 0; i < items.length; i++) {
+        let tweetObj = items[i];
+        let currentItem = formatTweetElement(tweetObj);
+        finalTweetStr += currentItem;
+      }
+      tweetsContainer.innerHTML = finalTweetStr;
+    };
+    xhr.send();
+  };
+  loadTweets(tweetsContainer);
+</script>
 {% endblock scripts %} {% endblock content %}
